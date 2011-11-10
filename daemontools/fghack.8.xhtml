@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja">
+<head>
+<title>fghack(8) - daemontools</title>
+</head>
+<body>
+<h1><code class="command">fghack</code>(8) - daemontools</h1>
+<h2><a id="name">名前</a></h2>
+<p>
+<code class="command">fghack</code>
+-
+バックグラウンドで動作するプログラムの終了を検知するためのツールです。
+</p>
+
+<h2><a id="syntax">書式</a></h2>
+<div class="syntax">
+<code class="commandline">fghack <var>program</var> [<var>arg</var> <var>...</var>]</code>
+</div>
+
+<h2><a id="description">解説</a></h2>
+<p>
+バックグラウンドで動作するプログラムが終了したとき、
+それをすばやく確実に検知する汎用的な方法はありません。
+<code class="command">fghack</code>
+は、
+この問題に対処するためのツールです。
+</p>
+<p>
+<code class="command">fghack</code>
+は、
+バックグラウンドで動作するプログラムの終了を検知するために、
+pipe(2) システムコールでダミーのパイプを作成します。
+次に子プロセスを生成すると、
+子プロセスはパイプの一方を大量に複製<!-- dup(2) x 30 -->した後にプログラム
+<code><var>program</var></code>
+を起動し、
+親プロセスはパイプのもう一方へデータが送られてくるのを待ちます。
+プログラム
+<code><var>program</var></code>
+は、
+<code class="command">fghack</code>
+から引き継いだパイプに対してデータを書き込むことはないはずです。
+例えデータが書き込まれたとしてもただ読み捨てられます。
+</p>
+<p>
+<code><var>program</var></code>
+が終了すると、
+プロセスが保持している記述子はすべて自動的にクローズされます。
+パイプの読み込み待ちをしていた
+<code class="command">fghack</code>
+は、
+パイプの一方がクローズされたことを検知して終了します。
+このようにして、
+<code class="command">fghack</code>
+はバックグランドで動作するプログラムの終了とほぼ同時に終了することができます。
+</p>
+<p>
+<!-- 独自の段落 -->
+このプログラムは、
+バックグラウンドで動作してしまうプログラムを
+<a href="supervise.8.xhtml"><code class="command">supervise(8)</code></a>
+の管理下に置くのに利用できます。
+</p>
+
+</body>
+</html>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja">
+<head>
+<title>addcr(1), delcr(1) - ucspi-tcp</title>
+</head>
+<body>
+<h1><code class="command">addcr</code>(1), <code class="command">delcr</code>(1) - ucspi-tcp</h1>
+<h2><a id="name">名前</a></h2>
+<p>
+<code class="command">addcr</code>
+,
+<code class="command">delcr</code>
+-
+行末の LF (\012) の前に CR (\015) を追加したり削除します。
+</p>
+
+<h2><a id="syntax">書式</a></h2>
+<div class="syntax">
+<code class="commandline">addcr</code>
+</div>
+<div>
+<code class="commandline">delcr</code>
+</div>
+
+<h2><a id="description">解説</a></h2>
+<p>
+<code class="command">addcr</code>
+は、
+標準入力から行を読み込み、
+各行の末尾 (LF の前) に CR を挿入して標準出力に書き込みます。
+最後に読み込んだ行では、行が不完全 (LF を含まない) なら CR は挿入しません。
+</p>
+<p>
+<code class="command">delcr</code>
+は、
+標準入力から行を読み込み、
+各行の末尾にある CR を削除して標準出力に書き込みます。
+最後に読み込んだ行では、行が不完全 (LF を含まない) なら CR を削除しません。
+</p>
+<p>
+いくつかの
+<code class="command">unix2dos</code>
+や
+<code class="command">dos2unix</code>
+プログラムは、
+長い行や null 文字 (\000) の扱いに問題を抱えています。
+<code class="command">addcr</code>
+と
+<code class="command">delcr</code>
+にはそのような問題はありません。
+</p>
+
+</body>
+</html>

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja">
+<head>
+<title>readproctitle(8) - daemontools</title>
+</head>
+<body>
+<h1><code class="command">readproctitle</code>(8) - daemontools</h1>
+<h2><a id="name">名前</a></h2>
+<p>
+<code class="command">readproctitle</code>
+-
+メモリ中に自動ローテーションされるログを保持し、
+ログを
+<code class="command">ps</code>(1)
+の出力から閲覧できるようにします。
+</p>
+<p>
+<code class="command">readproctitle</code>
+は、daemontools 0.75 以降で利用できます。
+</p>
+
+<h2><a id="syntax">書式</a></h2>
+<div class="syntax">
+<code class="commandline">readproctitle <var>label</var> [<var>...</var>] <var>memory</var></code>
+</div>
+
+<h2><a id="description">解説</a></h2>
+<p>
+プログラムの起動時に指定されたコマンドライン
+(プログラム名と引数)
+はメモリ中に保持され、
+<code class="command">ps</code>(1)
+などのプロセス一覧表示ツールで見ることができます。
+<code class="command">readproctitle</code>
+は、
+そこをログ用領域として利用します。
+</p>
+<p>
+<code><var>label</var></code>
+にはラベルとしてログ情報の先頭につける任意の文字列を指定し、
+<code><var>memory</var></code>
+にはログを保持するための領域を確保するために
+5 文字以上のドット「<code>.</code>」を指定します。
+</p>
+<p>
+<code class="command">readproctitle</code>
+は標準入力からデータを読み込むと、
+読み込んだデータの分だけ
+<code><var>memory</var></code>
+の中身を左方向にシフトし、
+空いた部分にデータを上書きします。
+こうすることで、
+<code class="command">ps</code>(1)
+などのプロセス一覧表示ツールで最近のデータを表示することができます。
+ただし、
+<code><var>memory</var></code>
+の最初の 3 つのドットだけはシフトせずに常に残します。
+</p>
+<p>
+例えば、
+<code class="command">readproctitle</code>
+を次のように起動します。
+</p>
+<div class="sample">
+<pre class="commandline"><code class="commandline">readproctitle io errors: ....................</code></pre>
+</div>
+<p>
+そして標準入力から次のような 2 行を読み込んだとします。
+</p>
+<div class="sample">
+<pre class="input"><code class="input">fatal error xyz
+warning abc
+</code></pre>
+</div>
+<p>
+すると、
+<code class="command">readproctitle</code>
+のコマンドラインは、次のように変化します。
+</p>
+<div class="sample">
+<pre class="commandline"><code class="commandline">readproctitle io errors: ... xyz!warning abc!</code></pre>
+</div>
+<p>
+ここでは、改行文字は「<code>!</code>」に置き換えて示しています。
+一般的にプロセス一覧表示ツールは、
+改行文字を「<code>?</code>」や「<code>\n</code>」に置き換えて表示します。
+</p>
+<p>
+<code class="command">readproctitle</code>
+は入力が最後まで達すると終了します。
+</p>
+<p>
+注意点を一つ。
+大抵の
+<code class="command">ps</code>(1)
+の実装には、
+表示できるプロセスのコマンドラインの長さに制限があります。
+この制限は、
+<code class="command">readproctitle</code>
+のコマンドラインの全長に影響します。
+<!-- FIXME: 次の文は省略
+I have not seen a system with a limit below 512 bytes.
+-->
+</p>
+</body>
+</html>

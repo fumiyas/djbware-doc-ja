@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja">
+<head>
+<title>fixcrio(1) - ucspi-tcp</title>
+</head>
+<body>
+<h1><code class="command">fixcrio</code>(1) - ucspi-tcp</h1>
+<h2><a id="name">名前</a></h2>
+<p>
+<code class="command">fixcrio</code>
+-
+行末に CR (\015) がなかったら挿入します。
+</p>
+
+<h2><a id="syntax">書式</a></h2>
+<div class="syntax">
+<code class="commandline">fixcrio <var>program</var> [<var>arg</var> <var>...</var>]</code>
+</div>
+
+<h2><a id="description">解説</a></h2>
+<p>
+<code class="command">fixcrio</code>
+は、
+プログラム
+<code><var>program</var></code>
+を起動します。
+そして
+<code><var>program</var></code>
+に対して入出力される行を見て、
+行の末尾に CR が含まれていなかったら CR を挿入します。
+</p>
+<p>
+<code class="command">fixcrio</code>
+は、
+<code><var>program</var></code>
+を子プロセスとして起動します。
+<code><var>program</var></code>
+の出力が終りまで達したら終了します。
+</p>
+
+</body>
+</html>

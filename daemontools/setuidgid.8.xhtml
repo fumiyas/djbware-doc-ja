@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja">
+<head>
+<title>setuidgid(8) - daemontools</title>
+</head>
+<body>
+<h1><code class="command">setuidgid</code>(8) - daemontools</h1>
+<h2><a id="name">名前</a></h2>
+<p>
+<code class="command">setuidgid</code>
+-
+ユーザーアカウントのユーザー ID と グループ ID のもとでプログラムを起動します。
+</p>
+
+<h2><a id="syntax">書式</a></h2>
+<div class="syntax">
+<code class="commandline">setuidgid <var>user</var> <var>program</var> [<var>arg ...</var>]</code>
+</div>
+
+<h2><a id="description">解説</a></h2>
+<p>
+<code class="command">setuidgid</code>
+は、
+プロセスのユーザー ID とグループ ID を UNIX ユーザーアカウント
+<code><var>user</var></code>
+のユーザー ID と(プライマリ)グループ ID に設定し、
+追加グループ権を外した後、
+プログラム
+<code><var>program</var></code>
+を引数
+<code><var>arg</var></code>
+とともに起動します。
+</p>
+<p>
+<code class="command">setuidgid</code>
+は、root 以外のユーザーが実行することはできません。
+</p>
+
+<h2><a id="exitcode">終了コード</a></h2>
+<p>
+次の場合、111 を返します。
+</p>
+<ul>
+    <li>ユーザーアカウント <code><var>user</var></code> が存在しない</li>
+    <li>setgid(2), setuid(2) に失敗</li>
+    <li>プログラム <code><var>program</var></code> の起動に失敗</li>
+</ul>
+<p>
+それ以外の場合、
+<code><var>program</var></code>
+の終了コードを返します。
+</p>
+</body>
+</html>

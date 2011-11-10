@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja">
+<head>
+<title>date@(1) - ucspi-tcp</title>
+</head>
+<body>
+<h1><code class="command">date@</code>(1) - ucspi-tcp</h1>
+<h2><a id="name">名前</a></h2>
+<p>
+<code class="command">date@</code>
+-
+リモートホスト上の日時を表示します。
+</p>
+
+<h2><a id="syntax">書式</a></h2>
+<div class="syntax">
+<code class="commandline">date@ [<var>host</var>]</code>
+</div>
+
+<h2><a id="description">解説</a></h2>
+<p>
+<code class="command">date@</code>
+は、
+ホスト
+<code class="hostname"><var>host</var></code>
+の TCP ポート 13 (daytime) に接続し、
+データを受け取って表示します。
+行末の CR (\015) は削除し、
+表示できない文字は見える形式に変換します。
+</p>
+<p>
+<code class="hostname"><var>host</var></code>
+を指定しないと、
+<code class="command">date@</code>
+はローカルホストに接続します。
+</p>
+<p>
+コンピューターは TCP ポート 13 への接続に対し、
+人が読める形式で日時を応答します。
+例えば
+<a href="tcpserver.1.xhtml"><code class="command">tcpserver(1)</code></a>
+を利用して、
+次のようなコマンドで実現することができます。
+</p>
+<div class="sample">
+<pre class="commandline"><code class="commandline">tcpserver -RHl0 0 13 date</code></pre>
+</div>
+
+</body>
+</html>

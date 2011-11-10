@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja">
+<head>
+<title>pgrphack(8) - daemontools</title>
+</head>
+<body>
+<h1><code class="command">pgrphack</code>(8) - daemontools</h1>
+<h2><a id="name">名前</a></h2>
+<p>
+<code class="command">pgrphack</code>
+-
+プログラムを独立したプロセスグループの下で起動します。
+</p>
+
+<h2><a id="syntax">書式</a></h2>
+<div class="syntax">
+<code class="commandline">pgrphack <var>program</var> [<var>arg</var> <var>...</var>]</code>
+</div>
+
+<h2><a id="description">解説</a></h2>
+<p>
+<code class="command">pgrphack</code>
+は、
+<code class="systemcall">setsid</code>(2)
+を実行してプロセスを新しいプロセスグループに移した後、
+プログラム
+<code><var>program</var></code>
+を引数
+<code><var>arg</var></code>
+とともに起動します。
+</p>
+<p>
+あるプログラムは、
+シグナルを受け取った場合に、
+自身が属するプロセスグループ全体にまでシグナルを送信しようとします。
+<code class="command">pgrphack</code>
+は、
+そのようなプログラムを
+<a href="supervise.8.xhtml"><code class="command">supervise(8)</code></a>
+の管理下に置くのに利用できます。
+</p>
+
+</body>
+</html>

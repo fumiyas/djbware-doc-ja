@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja">
+<head>
+<title>svscanboot(8) - daemontools</title>
+</head>
+<body>
+<h1><code class="command">svscanboot</code>(8) - daemontools</h1>
+<h2><a id="name">名前</a></h2>
+<p>
+<code class="command">svscanboot</code>
+-
+<a href="svscan.8.xhtml"><code class="command">svscan(8)</code></a>
+を
+<code class="directoryname">/service</code>
+ディレクトリで起動し、
+その出力とエラーメッセージを
+<a href="readproctitle.8.xhtml"><code class="command">readproctitle(8)</code></a>
+を利用して記録します。
+</p>
+<p>
+<code class="command">readproctitle</code>
+は、daemontools 0.75 以降で利用できます。
+</p>
+
+<h2><a id="syntax">書式</a></h2>
+<div class="syntax">
+<code class="commandline">svscanboot</code>
+</div>
+
+<h2><a id="description">解説</a></h2>
+<p>
+<code class="command">svscanboot</code>
+は、
+次のようなパイプラインを起動します。
+最後のドット「<code>.</code>」の数は、実際には 400 個です。
+</p>
+<div class="sample">
+<pre class="commandline"><code class="commandline">svscan /service 2&gt;&amp;1 | readproctitle service errors: .....</code></pre>
+</div>
+<p>
+<a href="svscan.8.xhtml"><code class="command">svscan(8)</code></a>
+から出力されるエラーメッセージの最新の 400 バイト分は、
+<code class="command">readproctitle</code>
+を通し、
+<code class="command">ps</code>(1)
+で見ることができます。
+</p>
+<p>
+<code class="commandline">svscanboot</code>
+は、環境変数
+<code class="environment">PATH</code>
+を次のような値に設定します。
+</p>
+<div class="sample">
+<code class="value">/command:/usr/local/bin:/usr/local/sbin:/bin:/sbin:/usr/bin:/usr/sbin:/usr/X11R6/bin</code>
+</div>
+<p>
+ほかの環境変数はすべて削除します。
+<!-- 次の文は削除
+Program writers are encouraged to use globally allocated names in /command.
+-->
+</p>
+
+</body>
+</html>

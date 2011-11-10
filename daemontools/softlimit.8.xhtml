@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja">
+<head>
+<title>softlimit(8) - daemontools</title>
+</head>
+<body>
+<h1><code class="command">softlimit</code>(8) - daemontools</h1>
+<h2><a id="name">名前</a></h2>
+<p>
+<code class="command">softlimit</code>
+-
+指定されたリソース制限のもとでプログラムを起動します。
+</p>
+
+<h2><a id="syntax">書式</a></h2>
+<div class="syntax">
+<code class="commandline">softlimit [<var>options</var>] <var>program</var> [<var>arg ...</var>]</code>
+</div>
+
+<h2><a id="description">解説</a></h2>
+<p>
+<code class="command">softlimit</code>
+は、
+プロセスが利用できるリソースのソフト制限 (soft limits) をオプション
+<code><var>options</var></code>
+に従い設定し、
+プログラム
+<code><var>program</var></code>
+を引数
+<code><var>arg</var></code>
+とともに起動します。
+</p>
+
+<h2><a id="option">オプション</a></h2>
+<!-- いくつかの訳語は bash の日本語 manpage を参考にした -->
+<p>
+各オプションにはリソースの制限値
+<code><var>n</var></code>
+を指定できますが、
+数値の代わりにイコール「<code>=</code>」を指定すると、
+ソフト制限はハード制限 (hard limits) と同じ値に設定されます。
+</p>
+<h3>メモリ使用量を制御するオプション</h3>
+<dl>
+<dt><code class="option">-m <var>n</var></code></dt>
+    <dd>
+	<code class="option">-d <var>n</var> -s <var>n</var> -l <var>n</var> -a <var>n</var></code> と指定した場合と同じです。
+    </dd>
+<dt><code class="option">-d <var>n</var></code></dt>
+    <dd>
+	データセグメントをプロセスあたり
+	<var>n</var>
+	バイト以内に制限します。
+    </dd>
+<dt><code class="option">-s <var>n</var></code></dt>
+    <dd>
+	スタックセグメントをプロセスあたり
+	<var>n</var>
+	バイト以内に制限します。
+    </dd>
+<dt><code class="option">-l <var>n</var></code></dt>
+    <dd>
+	ロックできる物理ページをプロセスあたり
+	<var>n</var>
+	バイト以内に制限します。
+	このオプションは、
+	OS によっては効果がありません。
+    </dd>
+<dt><code class="option">-a <var>n</var></code></dt>
+    <dd>
+	すべてのセグメントの合計をプロセスあたり
+	<var>n</var>
+	バイト以内に制限します。
+	このオプションは、
+	OS によっては効果がありません。
+    </dd>
+<dt><code class="option">-o <var>n</var></code></dt>
+    <dd>
+	オープンできるファイル記述子の数をプロセスあたり
+	<var>n</var>
+	個以下に制限します。
+	このオプションは、
+	OS によっては効果がありません。
+    </dd>
+<dt><code class="option">-p <var>n</var></code></dt>
+    <dd>
+	同時に実行できるプロセスの数をユーザー ID あたり
+	<var>n</var>
+	個以下に制限します。
+    </dd>
+</dl>
+<h3>ファイルのサイズを制御するオプション</h3>
+<dl>
+<dt><code class="option">-f <var>n</var></code></dt>
+    <dd>
+	出力ファイルのサイズを
+	<var>n</var>
+	バイト以下に制限します。
+    </dd>
+<dt><code class="option">-c <var>n</var></code></dt>
+    <dd>
+	core ファイルのサイズを
+	<var>n</var>
+	バイト以下に制限します。
+    </dd>
+</dl>
+<h3>優先度オプション</h3>
+<dl>
+<dt><code class="option">-r <var>n</var></code></dt>
+    <dd>
+	常駐セットのサイズを
+	<var>n</var>
+	バイト以下に制限します。
+	物理メモリが一杯でないときは、
+	この制限は課せられません。
+    </dd>
+<dt><code class="option">-t <var>n</var></code></dt>
+    <dd>
+	CPU 時間を
+	<var>n</var>
+	秒以下に制限します。
+	プロセスが
+	<!-- SIGXCPU --><code class="signalname">XCPU</code>
+	シグナルを受け取ってから
+	<var>n</var>
+	秒経過するまでの間を除き、
+	この制限は課せられません。
+    </dd>
+</dl>
+
+</body>
+</html>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja">
+<head>
+<title>http@(1) - ucspi-tcp</title>
+</head>
+<body>
+<h1><code class="command">http@</code>(1) - ucspi-tcp</h1>
+<h2><a id="name">名前</a></h2>
+<p>
+<code class="command">http@</code>
+-
+リモートホストから web ページを取得します。
+</p>
+
+<h2><a id="syntax">書式</a></h2>
+<div class="syntax">
+<pre class="commandline"><code class="commandline">http@ [<var>host</var> [<var>page</var> [<var>port</var>]]]</code></pre>
+</div>
+
+<h2><a id="description">解説</a></h2>
+<p>
+<code class="command">http@</code>
+は、
+ホスト
+<code class="hostname"><var>host</var></code>
+の TCP ポート
+<code><var>port</var></code>
+に接続し、
+次のようなデータを送信します。
+</p>
+<div class="sample">
+<pre class="input"><code class="input">GET /<var>page</var> HTTP/1.0
+Host: <var>host</var>
+</code></pre>
+</div>
+<p>
+そして応答の内容から行末の CR (\015) を削除して表示します。
+</p>
+<p>
+<code><var>port</var></code>
+を指定しないと、
+<code class="command">http@</code>
+は TCP ポート 80 (HTTP) を使用します。
+</p>
+<p>
+<code><var>page</var></code>
+を指定しないと、
+<code class="command">http@</code>
+は
+<code class="hostname"><var>host</var></code>
+に
+<code>/</code>
+を要求します。
+</p>
+<p>
+<code class="hostname"><var>host</var></code>
+を指定しないと、
+<code class="command">http@</code>
+はローカルホストに接続します。
+</p>
+
+</body>
+</html>

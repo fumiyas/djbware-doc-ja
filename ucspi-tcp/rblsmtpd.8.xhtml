@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- FIXME: legitimate の翻訳が抜けている。翻訳して入れたほうがよい? -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja">
+<head>
+<title>rblsmtpd(1) - ucspi-tcp</title>
+</head>
+<body>
+<h1><code class="command">rblsmtpd</code>(1) - ucspi-tcp</h1>
+<h2><a id="name">名前</a></h2>
+<p>
+<code class="command">rblsmtpd</code>
+-
+RBL に掲載されているサイトからのメールを遮断します。
+<a href="tcpserver.1.xhtml"><code class="command">tcpserver(1)</code></a>
+から起動できる SMTP サーバーと共に利用します。
+</p>
+
+<h2><a id="syntax">書式</a></h2>
+<div class="syntax">
+<code class="commandline">rblsmtpd <var>options</var> <var>program</var> [<var>arg</var> <var>...</var>]</code>
+</div>
+
+<h2><a id="description">解説</a></h2>
+<p>
+通常
+<code class="command">rblsmtpd</code>
+は、
+プログラム
+<code><var>program</var></code>
+を引数
+<code><var>arg</var></code>
+とともに起動します。
+<code><var>program</var></code>
+には、
+SMTP 通信を行いメールのメッセージを受け取るプログラムを指定します。
+</p>
+<p>
+<!-- Blocked clients の節から移動して改変 -->
+<!--
+環境変数
+<code class="environment">RBLSMTPD</code>
+が設定されていないと、
+-->
+<code class="command">rblsmtpd</code>
+は
+環境変数
+<code class="environment">TCPREMOTEIP</code>
+の値を RBL (Realtime Blackhole List) から検索し、
+掲載されているならメールを遮断します。
+<a href="tcpserver.1.xhtml"><code class="command">tcpserver(1)</code></a>
+は、
+<code class="environment">TCPREMOTEIP</code>
+にクライアントの IP アドレスを設定します。
+</p>
+<p>
+<!--しかし、-->
+クライアントからのメールを遮断すると判断した場合、
+<code class="command">rblsmtpd</code>
+は
+<code><var>program</var></code>
+を起動しません。
+その代わりに自身が持つ限定された SMTP 機能を用い、
+クライアントからのメッセージ送信を一時的に拒否します。
+同時に、
+動作状況を記録するため、
+標準エラー出力に 1 行だけ情報を書き込みます。
+</p>
+<p>
+<code class="command">rblsmtpd</code>
+は、
+自身の限定 SMTP 機能を開始してから 60 秒経過すると、
+SMTP 接続を切断して終了します。
+この時間は、クライアントとの無通信時間の長さにはよりません。
+</p>
+
+<h2><a id="option">オプション</a></h2>
+<dl>
+<dt><code class="option">-t <var>n</var></code></dt>
+    <dd>
+	限定 SMTP 機能の通信がタイムアウトする時間を
+	<var>n</var>
+	秒に変更します。
+	デフォルトは 60 秒です。
+    </dd>
+</dl>
+<h3>遮断されるクライアント</h3>
+<dl>
+<dt><code class="option">-r <var>base</var></code></dt>
+    <dd>
+	<code class="domainame"><var>base</var></code>
+	を RBL の供給元として使用します。
+	IP アドレスが
+	<code><var>a</var>.<var>b</var>.<var>c</var>.<var>d</var></code>
+	だとすると、
+	DNS に
+	<code class="domainname"><var>d</var>.<var>c</var>.<var>b</var>.<var>a</var>.<var>base</var></code>
+	という名前の TXT レコードを問い合わせ、
+	レコードが存在したら「RBL に掲載されている」と判断します。
+	レコードの値はクライアントへ示すエラーメッセージとして使用します。
+    </dd>
+<dt><code class="option">-a <var>base</var></code></dt>
+    <dd>
+	<code class="domainame"><var>base</var></code>
+	を反 RBL (anti-RBL) の供給元として使用します。
+	IP アドレスが
+	<code><var>a</var>.<var>b</var>.<var>c</var>.<var>d</var></code>
+	だとすると、
+	DNS に
+	<code class="domainname"><var>d</var>.<var>c</var>.<var>b</var>.<var>a</var>.<var>base</var></code>
+	という名前の A レコードを問い合わせ、
+	レコードが存在したら「反 RBL に掲載されている」と判断します。
+	その場合、
+	<code class="command">rblsmtpd</code>
+	はメールを遮断しません。
+    </dd>
+</dl>
+<p>
+<code class="option">-r</code>
+と
+<code class="option">-a</code>
+オプションは、
+任意の数だけ指定することができます。
+<code class="command">rblsmtpd</code>
+は、
+環境変数
+<code class="environment">TCPREMOTEIP</code>
+の IP アドレスに対応するレコードが見つかるまで、
+順番に供給元に問い合わせます。
+</p>
+<p>
+<code class="option">-r</code>
+と
+<code class="option">-a</code>
+どちらのオプションも指定しないと、
+<code class="command">rblsmtpd</code>
+は RBL 供給元として
+<code class="domainname">rbl.maps.vix.com</code>
+を使用します。
+<!-- 次の文は省略
+This will be changed in subsequent versions.
+-->
+</p>
+<h3>エラーコード</h3>
+<p>
+通常
+<code class="command">rblsmtpd</code>
+は、
+限定された SMTP 機能の通信でエラーコード 451 を使用します。
+このエラーコードは、
+<!-- legitimate -->
+クライアントは後ほど再試行してよいことを意味します。
+悪意のない管理者が問題に気づき、
+不正中継を禁止し、
+RBL から取り除き、
+メールが配送されるようにする機会を与えます。
+</p>
+<p>
+RBL 検索に関するエラーの取り扱いを制御するオプションは次の通りです。
+</p>
+<dl>
+<dt><code class="option">-B</code> (デフォルト)</dt>
+    <dd>
+	IP アドレスが RBL に掲載されているクライアントに対し、
+	エラーコード 451 を示します。
+    </dd>
+<dt><code class="option">-b</code></dt>
+    <dd>
+	IP アドレスが RBL に掲載されているクライアントに対し、
+	エラーコード 553 を示します。
+	<!-- Blocked clients の節から移動して改変 -->
+	このエラーコードは、
+	<!--legitimate-->
+	クライアントは直ちにメールをバウンスするように命じます。
+    </dd>
+<dt><code class="option">-C</code> (デフォルト)</dt>
+    <dd>
+	RBL の検索を「失敗したら開く (fail-open)」モードで処理します。
+	RBL の検索が一時的に失敗した場合は、
+	IP アドレスは RBL に掲載されていないものとして扱います。
+	反 RBL の検索が一時的に失敗した場合は、
+	IP アドレスは反 RBL に掲載されているものとして扱います。
+	残念ながら、
+	精通している攻撃者は
+	RBL 検索と反 RBL 検索を一時的に失敗させることが可能であるため、
+	そのような攻撃者からのメールは遮断されません。
+    </dd>
+<dt><code class="option">-c</code></dt>
+    <dd>
+	RBL の検索を「失敗したら閉じる (fail-closed)」モードで処理します。
+	RBL の検索が一時的に失敗した場合は、
+	IP アドレスは RBL に掲載されているものとして扱います
+	(ただし
+	<code class="option">-b</code>
+	が指定されていてもエラーコード 451 を使用)。
+	反 RBL の検索が一時的に失敗した場合は、
+	IP アドレスは反 RBL に掲載されていないものとして扱います
+	(ただし続く RBL 検索が成功して
+	<code class="option">-b</code>
+	が指定されていても、
+	エラーコード 451 を使用)。
+	あいにく、ときどきメールの配送が遅延することがあります。
+    </dd>
+</dl>
+
+<h2><a id="environment">環境変数</a></h2>
+<!--
+<h3>クライアントの遮断</h3>
+-->
+<!-- 環境変数 RBLSMTPD が設定されていると、RBL への問い合わせは実行されない -->
+<p>
+環境変数
+<code class="environment">RBLSMTPD</code>
+が設定され値が空でないと、
+<code class="command">rblsmtpd</code>
+はメールを遮断します。
+その際
+<code class="environment">RBLSMTPD</code>
+の値をクライアントに示すエラーメッセージとして利用します。
+通常、
+<code class="command">rblsmtpd</code>
+は
+<a href="tcpserver.1.xhtml"><code class="command">tcpserver(1)</code></a>
+の下で起動するため、
+<a href="tcprules.1.xhtml"><code class="command">tcprules(1)</code></a>
+を利用して特定のクライアントに対して
+<code class="environment">RBLSMTPD</code>
+を設定することができます。
+</p>
+<p>
+環境変数
+<code class="environment">RBLSMTPD</code>
+の値がハイフン「<code>-</code>」で始まっていると、
+<code class="command">rblsmtpd</code>
+はハイフンを取り除き、
+SMTP のエラーコードとして 451 の代わりに 553 を用いてクライアントを遮断します。
+</p>
+<p>
+環境変数
+<code class="environment">RBLSMTPD</code>
+が設定され値が空だと、
+<code class="command">rblsmtpd</code>
+はメールを遮断しません。
+</p>
+<!--
+<h3>エラーコード</h3>
+<p>
+環境変数
+<code class="environment">RBLSMTPD</code>
+が設定され値が空でないと、
+<code class="command">rblsmtpd</code>
+は通常、
+SMTP 通信でエラーコード 451 を使用します。
+このエラーコードは、
+後ほど再試行してよいことをクライアントに伝えます。
+</p>
+-->
+
+<h2><a id="rbl">RBL の供給元</a></h2>
+<p>
+<code class="command">rblsmtpd</code>
+用に自分で RBL か反 RBL を用意したいなら、
+djbdns パッケージの
+<code class="command">rbldns</code>
+を利用することができます。
+</p>
+<p>
+公開されている RBL の供給元は次のようなものがあります。
+</p>
+<ul>
+    <li><code class="domainname">bl.spamcop.net</code></li>
+    <li><code class="domainname">dev.null.dk</code></li>
+    <li><code class="domainname">list.dsbl.org</code> (2002 年 3 月現在、rbldns を利用)</li>
+    <li><code class="domainname">multihop.dsbl.org</code> (2002 年 3 月現在、rbldns を利用)</li>
+    <li><code class="domainname">or.orbl.org</code> (2001 年 10 月現在、停止)</li>
+    <li><code class="domainname">orbs.dorkslayers.com</code></li>
+    <li><code class="domainname">orbz.gst-group.co.uk</code></li>
+    <li><code class="domainname">relays.ordb.org</code></li>
+    <li><code class="domainname">relays.osirusoft.com</code></li>
+    <li><code class="domainname">unconfirmed.dsbl.org</code> (2002 年 3月現在、rbldns を利用)</li>
+</ul>
+<!-- 以下は省略
+I've given up on the following RBL sources for various reasons:
+
+    * blackholes.mail-abuse.org, demanding money for access as of 2001-07
+    * dialups.mail-abuse.org, demanding money for access as of 2001-07
+    * dul.maps.vix.com, renamed dialups.mail-abuse.org
+    * inputs.orbz.org, disabled as of 2002-03
+    * outputs.orbs.org, disabled in 2001-06
+    * outputs.orbz.org, disabled as of 2002-03
+    * rbl.maps.vix.com, renamed blackholes.mail-abuse.org
+    * relays.mail-abuse.org, TXT records eliminated in 2000-08, demanding money for access as of 2001-07
+    * relays.msci.memphis.edu, a copy of relays.mail-abuse.org with TXT records, disabled in 2001-01 because mail-abuse.org started demanding money
+    * rss.maps.vix.com, renamed relays.mail-abuse.org 
+
+relays.mail-abuse.org stopped working with rblsmtpd in August 2000, because all the TXT records were removed. ``They were eliminated because the zone file is growing rather large,'' the maintainers said. This problem wouldn't occur with rbldns, because rbldns databases are much smaller than zone files. However, the people who run MAPS also have financial interests in BIND, and they refuse to use rbldns.
+-->
+
+</body>
+</html>

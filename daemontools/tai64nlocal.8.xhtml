@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja">
+<head>
+<title>tai64nlocal(8) - daemontools</title>
+</head>
+<body>
+<h1><code class="command">tai64nlocal</code>(8) - daemontools</h1>
+<h2><a id="name">名前</a></h2>
+<p>
+<code class="command">tai64nlocal</code>
+-
+TAI64N 形式の日時を人が読み易い形式に変換します。
+</p>
+
+<h2><a id="syntax">書式</a></h2>
+<div class="syntax">
+<code class="commandline">tai64nlocal</code>
+</div>
+
+<h2><a id="description">解説</a></h2>
+<p>
+<code class="command">tai64nlocal</code>
+は、
+標準入力から行を読み込みます。
+行がアットマーク「<code>@</code>」で始まっていないなら、
+変更せずにそのまま標準出力に書き込みます。
+行が「<code>@</code>」で始まっているなら、
+「<code>@</code>」以降の日時
+(<a href="tai64n.8.xhtml"><code class="command">tai64n(8)</code></a> によって出力された形式)
+を
+地域時間 (local time) の ISO 形式
+YYYY-MM-DD HH:MM:SS.SSSSSSSSS
+に変換して標準出力に書き込みます。
+</p>
+<p>
+例えば、次のような行を読み込んだとします。
+</p>
+<div class="sample">
+<pre class="input"><code class="input">@4000000037c219bf2ef02e94 mark
+</code></pre>
+</div>
+<p>
+アメリカ西海岸 (US/Pacific) の時間帯 (time zone) では、
+次のように表示されます。
+</p>
+<div class="sample">
+<pre class="output"><code class="output">1999-08-23 21:03:43.787492500 mark
+</code></pre>
+</div>
+<p>
+しかし、現在の
+<code class="command">tai64nlocal</code>
+の実装では、
+地域時間を得るための処理が
+UNIX の
+<code class="function">localtime</code>
+関数に依存しているので注意してください。
+いくつかの
+<code class="function">localtime</code>
+の実装は誤った時間基準を用いており、
+うるう秒 (leap seconds) を考慮していません。
+この問題を解決するには、
+Olson tz ライブラリと最新のうるう秒表を利用し、
+例えば時間帯の設定が
+「<code>US/Pacific</code>」
+だったら、
+代わりに
+「<code>right/US/Pacific</code>」
+という形で指定します。
+</p>
+<p>
+大抵の
+<code class="function">localtime</code>
+の実装は 2038 年以降の時間に対応していないので注意してください。
+</p>
+<p>
+<code class="command">tai64nlocal</code>
+は、
+入力が終わりに達すると、
+0 を返して終了します。
+標準入力からの読み込みや標準出力への書き込みで問題が発生すると、
+エラーメッセージはなにも表示せずに 111 を返して終了します。
+</p>
+<p>
+<code class="command">tai64nlocal</code>
+は、
+起動後は一切メモリを確保しません。
+ただし
+<code class="function">localtime</code>
+内部で確保される可能性があるかもしれません。
+</p>
+
+</body>
+</html>

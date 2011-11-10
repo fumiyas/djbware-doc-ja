@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja">
+<head>
+<title>svc(8) - daemontools</title>
+</head>
+<body>
+<h1><code class="command">svc</code>(8) - daemontools</h1>
+<h2><a id="name">名前</a></h2>
+<p>
+<code class="command">svc</code>
+-
+<a href="supervise.8.xhtml"><code class="command">supervise(8)</code></a>
+で監視されているサービスを制御します。
+</p>
+
+<h2><a id="syntax">書式</a></h2>
+<div class="syntax">
+<code class="commandline">svc [-udopchaitkx] <var>service</var> [<var>...</var>]</code>
+</div>
+
+<h2><a id="description">解説</a></h2>
+<p>
+<!-- 独自の節 -->
+<code class="command">svc</code>
+は、
+<a href="supervise.8.xhtml"><code class="command">supervise(8)</code></a>
+により監視されているサービスを起動・停止したり、
+サービスのプロセスにシグナルを送信します。
+<code class="directoryname"><var>service</var></code>
+には、
+<a href="supervise.8.xhtml"><code class="command">supervise(8)</code></a>
+で監視されているサービスのディレクトリを指定します。
+サービスディレクトリは一度に複数指定できます。
+</p>
+
+<h2><a id="option">オプション</a></h2>
+<p>
+<code class="command">svc</code>
+は、
+指定されたサービスすべてにオプションを適用します。
+</p>
+<dl>
+<dt><code class="option">-u</code></dt>
+    <dd>
+	立ち上げ (up)。
+	サービスが動作していなければ起動します。
+	その後サービスが終了したら自動的に再起動します。
+    </dd>
+<dt><code class="option">-d</code></dt>
+    <dd>
+	立ち下げ (down)。
+	サービスが動作していれば、
+	最初に
+	<code class="signalname">TERM</code>
+	シグナルを送り、
+	続いて
+	<code class="signalname">CONT</code>
+	シグナルを送ります。
+	サービスが終了した後は、再起動はしません。
+    </dd>
+<dt><code class="option">-o</code></dt>
+    <dd>
+	一回 (once) 立ち上げ。
+	サービスが動作していなければ起動します。
+	その後サービスが終了しても、再起動はしません。
+    </dd>
+<dt><code class="option">-p</code></dt>
+    <dd>
+	一時停止 (pause)。
+	サービスに
+	<code class="signalname">STOP</code>
+	シグナルを送ります。
+    </dd>
+<dt><code class="option">-c</code></dt>
+    <dd>
+	再開 (continue)。
+	サービスに
+	<code class="signalname">CONT</code>
+	シグナルを送ります。
+    </dd>
+<dt><code class="option">-h</code></dt>
+    <dd>
+	ハングアップ (hangup)。
+	サービスに
+	<code class="signalname">HUP</code>
+	シグナルを送ります。
+    </dd>
+<dt><code class="option">-a</code></dt>
+    <dd>
+	アラーム (alarm)。
+	サービスに
+	<code class="signalname">ALRM</code>
+	シグナルを送ります。
+    </dd>
+<dt><code class="option">-i</code></dt>
+    <dd>
+	割込み (interrupt)。
+	サービスに
+	<code class="signalname">INT</code>
+	シグナルを送ります。
+    </dd>
+<dt><code class="option">-t</code></dt>
+    <dd>
+	終了 (terminate)。
+	サービスに
+	<code class="signalname">TERM</code>
+	シグナルを送ります。
+    </dd>
+<dt><code class="option">-k</code></dt>
+    <dd>
+	強制終了 (kill)。
+	サービスに
+	<code class="signalname">KILL</code>
+	シグナルを送ります。
+    </dd>
+<dt><code class="option">-x</code></dt>
+    <dd>
+	退去 (exit)。
+	サービスが動作していれば終了させ、
+	サービスを監視している
+	<a href="supervise.8.xhtml"><code class="command">supervise(8)</code></a>
+	自身もすぐに終了させます。
+	何かおかしなことをした場合を除き、
+	通常の安定したシステムでこのオプションを利用することはありません。
+	<a href="supervise.8.xhtml"><code class="command">supervise(8)</code></a>
+	は、常に動作し続けるように設計されています。
+    </dd>
+</dl>
+
+</body>
+</html>

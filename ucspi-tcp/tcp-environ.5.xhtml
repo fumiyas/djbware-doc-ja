@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja">
+<head>
+<title>tcp-environ - TCP 関連の環境変数 - ucspi-tcp</title>
+</head>
+<body>
+<h1>tcp-environ - TCP 関連の環境変数 - ucspi-tcp</h1>
+<h2><a id="name">名前</a></h2>
+<p>
+tcp-environ
+-
+TCP 関連の環境変数
+</p>
+<h2><a id="description">解説</a></h2>
+<p>
+ここで解説する環境変数は、
+TCP 接続の状態を表します。
+それらの変数は、
+<code class="command">tcp-env</code>(1),
+<a href="tcpclient.1.xhtml"><code class="command">tcpclient(1)</code></a>,
+<a href="tcpserver.1.xhtml"><code class="command">tcpserver(1)</code></a>
+などによって設定されます。
+環境変数
+<code class="environment">TCPLOCALHOST</code>,
+<code class="environment">TCPREMOTEHOST</code>,
+<code class="environment">TCPREMOTEINFO</code>
+には任意の文字が含まれるため、
+注意してください。
+</p>
+
+<dl>
+<dt><code class="environment">PROTO</code></dt>
+    <dd>文字列「<code>TCP</code>」。</dd>
+<dt><code class="environment">TCPLOCALHOST</code></dt>
+    <dd>ローカルホストのドメイン名。
+	英大文字は英小文字に変換されます。
+	ローカルの IP アドレスに対応するドメイン名が
+    </dd>
+</dl>
+</body>
+</html>

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja">
+<head>
+<title>supervise(8) - daemontools</title>
+</head>
+<body>
+<h1><code class="command">supervise</code>(8) - daemontools</h1>
+<h2><a id="name">名前</a></h2>
+<p>
+<code class="command">supervise</code>
+-
+サービスの開始と監視を行います。
+</p>
+
+<h2><a id="syntax">書式</a></h2>
+<div class="syntax">
+<code class="commandline">supervise <var>service</var></code>
+</div>
+
+<h2><a id="description">解説</a></h2>
+<p>
+<code class="command">supervise</code>
+は、
+ディレクトリ
+<code class="directoryname"><var>service</var></code>
+に移動し、
+<code>./run</code>
+を起動します。
+<code>./run</code>
+が終了したら、
+<code>./run</code>
+を再起動します。
+<code class="command">supervise</code>
+は
+<code>./run</code>
+の起動後に 1 秒間休止することで、
+<code>./run</code>
+がすぐに終了してしまう場合に短時間でループが発生しないようにします。
+</p>
+<p>
+<code class="directoryname"><var>service</var>/down</code>
+というファイルがあると、
+<code class="command">supervise</code>
+は
+<code>./run</code>
+をすぐには起動しません。
+<a href="svc.8.xhtml"><code class="command">svc(8)</code></a>
+を利用すれば、
+<code>./run</code>
+を起動させるなど、
+<code class="command">supervise</code>
+に対して様々な指示を与えることができます。
+</p>
+<p>
+<code class="command">supervise</code>
+は、
+現在の状態をディレクトリ
+<code class="directoryname"><var>service</var>/supervise</code>
+以下のファイルにバイナリ形式で保持します。
+このディレクトリは、
+<code class="command">supervise</code>
+が書き込みできるようにしなければなりません。
+状態は
+<a href="svstat.8.xhtml"><code class="command">svstat(8)</code></a>
+を利用して読み出すことができます。
+</p>
+<p>
+<code class="command">supervise</code>
+は、
+<code class="directoryname"><var>service</var></code>
+内に必要なファイルが見つからなかったり、
+ほかの
+<code class="command">supervise</code>
+プロセスがすでに
+<code class="directoryname"><var>service</var></code>
+内で動作していると、起動後すぐに終了します。
+ひとたび動作を開始すると、
+強制終了されるか終了するよう指示されない限り、
+終了することはありません。
+<a href="svok.8.xhtml"><code class="command">svok(8)</code></a>
+を利用すれば、
+<code class="command">supervise</code>
+が正常に動作しているかどうか調べることができます。
+<a href="svscan.8.xhtml"><code class="command">svscan(8)</code></a>
+を利用すれば、
+複数の
+<code class="command">supervise</code>
+プロセスを確実に起動することができます。
+</p>
+
+</body>
+</html>

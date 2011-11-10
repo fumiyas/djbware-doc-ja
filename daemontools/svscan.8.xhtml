@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja">
+<head>
+<title>svscan(8) - daemontools</title>
+</head>
+<body>
+<h1><code class="command">svscan</code>(8) - daemontools</h1>
+<h2><a id="name">名前</a></h2>
+<p>
+<code class="command">svscan</code>
+-
+サービスの集合の開始と監視を行います。
+</p>
+
+<h2><a id="syntax">書式</a></h2>
+<div class="syntax">
+<code class="commandline">svscan [<var>dir</var>]</code>
+</div>
+
+<h2><a id="description">解説</a></h2>
+<p>
+<code class="command">svscan</code>
+は、
+カレントディレクトリ
+(あるいは指定されたディレクトリ <code class="directoryname"><var>dir</var></code>)
+以下のサブディレクトリごとに、
+<a href="supervise.8.xhtml"><code class="command">supervise(8)</code></a>
+を一つ起動します。
+サブディレクトリの数は 1000 以内に制限され、
+それ以上は無視されます。
+また、名前がドット「<code>.</code>」で始まるサブディレクトリも無視されます。
+<a href="supervise.8.xhtml"><code class="command">supervise(8)</code></a>
+は
+<code class="command">svscan</code>
+の検索パス内になければなりません。
+</p>
+<p>
+サブディレクトリ
+<code class="directoryname"><var>service</var></code>
+の名前が 255 バイト以下で
+<code class="directoryname"><var>service</var>/log</code>
+というディレクトリが存在すると
+(daemontools バージョン 0.70 以前では、
+<code class="directoryname"><var>service</var></code>
+にスティッキー (sticky) 権も必要)
+、
+<code class="command">svscan</code>
+は
+<code class="directoryname"><var>service</var>/log</code>
+用に
+<a href="supervise.8.xhtml"><code class="command">supervise(8)</code></a>
+をもう一つ起動し、
+<code class="directoryname"><var>service</var></code>
+用の
+<a href="supervise.8.xhtml"><code class="command">supervise(8)</code></a>
+とパイプで接続します。
+このため
+<code class="command">svscan</code>
+は、
+パイプ用の 2 つの空き記述子を必要とします。
+</p>
+<p>
+<code class="command">svscan</code>
+は 5 秒ごとにサブディレクトリを再確認します。
+新しいサブディレクトリを見つけると、
+新たに
+<a href="supervise.8.xhtml"><code class="command">supervise(8)</code></a>
+を起動します。
+以前のサブディレクトリで
+<a href="supervise.8.xhtml"><code class="command">supervise(8)</code></a>
+プロセスが終了していたら、
+<a href="supervise.8.xhtml"><code class="command">supervise(8)</code></a>
+を再起動します。
+ログ用の
+<a href="supervise.8.xhtml"><code class="command">supervise(8)</code></a>
+を起動していた場合は、
+データを消失させないため、
+同じパイプを再利用します。
+</p>
+<p>
+<code class="command">svscan</code>
+は、常に動作し続けるように設計されています。
+パイプの作成や
+<a href="supervise.8.xhtml"><code class="command">supervise(8)</code></a>
+の起動で問題が発生すると、
+標準エラー出力にメッセージを表示し、
+5 秒後に再試行します。
+</p>
+<!-- 以下の節は省略 (代わりに最初に記述)
+If svscan is given a command-line argument,
+it switches to that directory when it starts.
+-->
+
+</body>
+</html>

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja">
+<head>
+<title>recordio(1) - ucspi-tcp</title>
+</head>
+<body>
+<h1><code class="command">recordio</code>(1) - ucspi-tcp</h1>
+<h2><a id="name">名前</a></h2>
+<p>
+<code class="command">recordio</code>
+-
+プログラムの入出力を記録します。
+</p>
+
+<h2><a id="syntax">書式</a></h2>
+<div class="syntax">
+<code class="commandline">recordio <var>program</var> [<var>arg</var> <var>...</var>]</code>
+</div>
+
+<h2><a id="description">解説</a></h2>
+<p>
+<code class="command">recordio</code>
+は、
+プログラム
+<code><var>program</var></code>
+を引数
+<code><var>arg</var></code>
+とともに起動します。
+そして、
+<code><var>program</var></code>
+へ入出力されるデータを標準エラー出力に表示します。
+</p>
+<p>
+標準エラー出力に表示される各行の先頭には、
+<code><var>program</var></code>
+のプロセス ID と、
+入力には「<code>&lt;</code>」、
+出力には「<code>&gt;</code>」が挿入されます。
+また各行の最後には、
+「<code>+</code>」、
+スペース、
+または「<code>[EOF]</code>」が挿入されます。
+スペースは入出力に改行文字があったことを示し、
+「<code>[EOF]</code>」は入出力が終わりまで達したことを示します。
+</p>
+<p>
+<code class="command">recordio</code>
+は、
+入出力の各パケットを即座に表示します。
+パケットを連結してひとまとまりの行にするといったことはしません。
+例えば次のように起動したとします。
+</p>
+<div class="sample">
+<pre class="commandline"><code class="commandline">recordio sh -c 'cat /dev/fd/8 2&gt;&amp;1' &gt; /dev/null</code></pre>
+</div>
+<p>
+これは次のような出力をするかもしれません。
+</p>
+<div class="sample">
+<pre class="output"><code class="output">5135 &gt; cat: /dev/fd/8: Bad file descriptor 
+5135 &gt; [EOF]
+</code></pre>
+</div>
+<p>
+しかし、
+<code class="command">cat</code>(1)
+が出力を分けて実行した場合は次のような出力になるでしょう。
+</p>
+<div class="sample">
+<pre class="output"><code class="output">5135 &gt; cat: +
+5135 &gt; /dev/fd/8+
+5135 &gt; : +
+5135 &gt; Bad file descriptor 
+5135 &gt; [EOF]
+</code></pre>
+</div>
+<p>
+<!-- 意味不明 -->
+<code class="command">recordio</code>
+は、
+長いパケットを複数の行を使用して出力することで、
+<code><var>program</var></code>
+の入出力の各行が一つひとつ表示されることを保証します。
+</p>
+<p>
+<code class="command">recordio</code>
+は、
+<code><var>program</var></code>
+を子プロセスとして起動します。
+<code><var>program</var></code>
+の出力が終りまで達したら終了します。
+</p>
+
+</body>
+</html>

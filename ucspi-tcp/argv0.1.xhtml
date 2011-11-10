@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja">
+<head>
+<title>argv0(1) - ucspi-tcp</title>
+</head>
+<body>
+<h1><code class="command">argv0</code>(1) - ucspi-tcp</h1>
+<h2><a id="name">名前</a></h2>
+<p>
+<code class="command">argv0</code>
+-
+0 番目の引数を指定してプログラムを起動します。
+</p>
+
+<h2><a id="syntax">書式</a></h2>
+<div class="syntax">
+<code class="commandline">argv0 <var>realname</var> <var>zero</var> [<var>arg</var> <var>...</var>]</code>
+</div>
+
+<h2><a id="description">解説</a></h2>
+<p>
+<code class="command">argv0</code>
+は、
+ディスク上に
+<code><var>realname</var></code>
+という名前で置かれているプログラムを、
+0 番目の引数として
+(<code><var>realname</var></code> の代わりに)
+<code><var>zero</var></code>
+を、
+1 番目以降の引数として
+<code><var>arg</var></code>
+を指定して起動します。
+</p>
+
+<h2><a id="aplication">応用</a></h2>
+<p>
+いくつかのプログラムは、
+0 番目の引数に特別な意味を持たせています。
+<code class="command">argv0</code>
+を利用すれば、
+そのようなプログラムをシェルスクリプトから有効に起動することができます。
+</p>
+<p>
+例えば次のように、
+0 番目の引数に
+<code>-csh</code>
+を指定して
+<code class="command">/bin/csh</code>
+を起動します。
+</p>
+<div class="sample">
+<pre class="commandline"><code class="commandline">argv0 /bin/csh -csh</code></pre>
+</div>
+<p>
+すると
+<code class="command">/bin/csh</code>
+は、
+引数に従いログインシェルとして動作します。
+</p>
+<p>
+もう一つの例として、次のようなコマンドを見てください。
+</p>
+<div class="sample">
+<pre class="commandline"><code class="commandline">tcpserver 0 ftp argv0 tcpd ftpd -l -A</code></pre>
+</div>
+<p>
+このコマンドは、
+次のような行を
+<code class="filename">/etc/inetd.conf</code>
+に記述した場合と同じ結果になります。
+</p>
+<div class="sample">
+<pre class="commandline"><code class="config">ftp stream tcp nowait root tcpd ftpd -l -A</code></pre>
+</div>
+<p>
+<code class="command">tcpd</code>
+プログラムは、
+0 番目の引数に
+<code class="command">ftpd</code>
+、
+それ以降の引数に
+<code class="option">-l -A</code>
+を指定して
+<code class="command">ftpd</code>
+を起動します。
+<code class="command">tcpd</code>
+は
+<a href="tcpserver.1.xhtml"><code class="command">tcpserver(1)</code></a>
+に置き換えることができます。
+次のように
+<code class="option">-x</code>
+オプションを使用するとよいでしょう。
+</p>
+<div class="sample">
+<pre class="commandline"><code class="commandline">tcpserver -x ftp.tcp.cdb 0 ftp ftpd -l -A</code></pre>
+</div>
+
+</body>
+</html>

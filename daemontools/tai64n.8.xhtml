@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja">
+<head>
+<title>tai64n(8) - daemontools</title>
+</head>
+<body>
+<h1><code class="command">tai64n</code>(8) - daemontools</h1>
+<h2><a id="name">名前</a></h2>
+<p>
+<code class="command">tai64n</code>
+-
+各行に正確な日時を付加します。
+</p>
+
+<h2><a id="syntax">書式</a></h2>
+<div class="syntax">
+<code class="commandline">tai64n</code>
+</div>
+
+<h2><a id="description">解説</a></h2>
+<p>
+<code class="command">tai64n</code>
+は、
+標準入力から行を読み込み、
+各行ごとに次のものを標準出力へ出力します。
+</p>
+<ol>
+    <li>アットマーク「<code>@</code>」</li>
+    <li>正確な日時 (timestamp)</li>
+    <li>スペース</li>
+    <li>入力行のコピー</li>
+</ol>
+<p>
+日時は、
+<code class="command">tai64n</code>
+が行の最初の文字を読み込んだ時を示します。
+</p>
+<p>
+<code class="command">tai64n</code>
+は、
+入力が終わりに達すると、
+0 を返して終了します。
+標準入力からの読み込みや標準出力への書き込みで問題が発生すると、
+エラーメッセージはなにも表示せずに 111 を返して終了します。
+</p>
+<p>
+<code class="command">tai64n</code>
+は、
+起動後は一切メモリを確保しません。
+</p>
+
+<h2><a id="timestamp">日時の形式</a></h2>
+<p>
+<code class="command">tai64n</code>
+が出力する日時は、
+12 バイトの TAI64N 表現 (TAI64N label) を
+TAI64N 外部形式
+(external TAI64N format -
+<a href="http://cr.yp.to/libtai/tai64.html#tai64n">http://cr.yp.to/libtai/tai64.html#tai64n</a> を参照)
+で表わしたもので、
+小文字 24 桁の 16 進数で表示されます。
+<a href="tai64nlocal.8.xhtml"><code class="command">tai64nlocal(8)</code></a>
+を利用すれば、
+人が読み易い形式に変換することができます。
+</p>
+<p>
+例えば「4000000037c219bf2ef02e94」という日時表示は、
+TAI 時間の 1970 年の始まりから 935467455.787492500 秒後の時間を示します。
+(16 進数 37c219bf は 10 進数で 935467455、
+2ef02e94 は 787492500)
+</p>
+<p>
+現在の
+<code class="command">tai64n</code>
+の実装では、
+現在の TAI 時間を
+TAI 時間 1970-01-01 00:00:10 からの経過秒数で返すための処理を、
+UNIX の
+<code>gettimeofday</code>
+関数に依存しています。
+大抵の
+<code>gettimeofday</code>
+の実装は 2038 年以降の時間に対応していません。
+その上、
+大抵の時計は正確に設定されていません。
+</p>
+
+</body>
+</html>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja">
+<head>
+<title>envdir(8) - daemontools</title>
+</head>
+<body>
+<h1><code class="command">envdir</code>(8) - daemontools</h1>
+<h2><a id="name">名前</a></h2>
+<p>
+<code class="command">envdir</code>
+-
+ディレクトリ内のファイルに従い環境変数を設定した後、
+プログラムを起動します。
+</p>
+
+<h2><a id="syntax">書式</a></h2>
+<div class="syntax">
+<code class="commandline">envdir <var>dir</var> <var>program</var> [<var>arg ...</var>]</code>
+</div>
+
+<h2><a id="description">解説</a></h2>
+<p>
+<code class="command">envdir</code>
+は、
+<code class="directoryname"><var>dir</var></code>
+で指定されたディレクトリ内のファイルに従い環境変数を設定し、
+その後にプログラム
+<code><var>program</var></code>
+を引数
+<code><var>arg</var></code>
+とともに起動します。
+</p>
+<p>
+ディレクトリ
+<code class="directoryname"><var>dir</var></code>
+直下にファイルがあると、
+ファイル名と同じ名前の環境変数が、
+ファイルの 1 行目に記述されている値で設定されます。
+ファイル名にはイコール「<code>=</code>」を含めてはいけません。
+値の末尾にスペースかタブが含まれていると、それらは削除されます。
+値に NULL 文字が含まれていると、それらは改行文字に置き換えられます。
+</p>
+<p>
+ファイルが空 (サイズが 0 バイト) の場合は例外となり、
+対応する環境変数は削除されます。
+</p>
+
+<h2><a id="exitcode">終了コード</a></h2>
+<p>
+次の場合、111 を返します。
+</p>
+<ul>
+    <li>
+	ディレクトリ
+	<code class="directoryname"><var>dir</var></code>
+	の読み込みに失敗
+    </li>
+    <li>環境変数を設定するためのメモリ確保に失敗</li>
+    <li>プログラム <code><var>program</var></code> の起動に失敗</li>
+</ul>
+<p>
+それ以外の場合、
+<code><var>program</var></code>
+の終了コードを返します。
+</p>
+
+</body>
+</html>

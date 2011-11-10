@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja">
+<head>
+<title>qualification(5) - 名前修飾ユーザーズガイド - djbdns</title>
+</head>
+<body>
+<h1>qualification(5) - 名前修飾ユーザーズガイド - djbdns</h1>
+<h2><a id="name">名前</a></h2>
+<p>
+qualification - 名前修飾ユーザーズガイド
+</p>
+<h2><a id="overview">概要</a></h2>
+<p>
+修飾 (qualification) とは、
+短かいホストの名前を完全なドメインの名前
+(fully qualified domain name - 完全修飾ドメイン名)
+に変換することを意味します。
+例えば
+「<code class="hostname">cheetah</code>」
+と打ち込んだものが、
+「<code class="hostname">cheetah.xyz.example.com</code>」
+という名前に変換される処理のことを指します。
+</p>
+<p>
+ここでは、
+djbdns が行う修飾の手順を解説します。
+djbdns の
+<code class="function">dns_ip4_qualify</code>
+ライブラリルーチンと
+<code class="function">dns_ip4_qualify</code>
+ルーチンを利用しているプログラムは、
+この規則に従います。
+</p>
+
+<h2><a id="rewriting-instructions">書き換え指定</a></h2>
+<p>
+通常、
+djbdns の修飾処理は、
+システム管理者が用意した
+<code class="filename">/etc/dnsrewrite</code>
+ファイル中に列挙された指示に従います。
+<code class="filename">/etc/dnsrewrite</code>
+は無視することが可能で、
+独自にファイルを用意して環境変数
+<code class="environment">DNSREWRITEFILE</code>
+にそのファイル名を設定すれば、
+そちらが優先されます。
+</p>
+<p>
+以下に見本の指定を示します:
+</p>
+<div class="sample">
+<pre class="config"><code class="config"># anything.local -&gt; me
+-.local:me
+# me -&gt; 127.0.0.1
+=me:127.0.0.1
+# any.name.a -&gt; any.name.example.com
+*.a:.example.com
+# any-name-without-dots -&gt; any-name-without-dots.xyz.example.com
+?:.xyz.example.com
+# remove trailing dot
+*.:
+</code></pre>
+</div>
+<p>
+各指定は順番通りに 1 回ずつ適用されます。
+次のような 4 種類の指定があります。
+</p>
+<dl>
+<dt><code class="option">=<var>post</var>:<var>new</var></code></dt>
+    <dd>
+	ホスト名
+	「<code class="hostname"><var>post</var></code>」
+	は
+	「<code class="hostname"><var>new</var></code>」
+	に書き換えられます。
+    </dd>
+<dt><code class="option">*<var>post</var>:<var>new</var></code></dt>
+    <dd>
+	ホスト名が
+	「<code class="hostname"><var>post</var></code>」
+	で終わる場合、例えば
+	「<code class="hostname"><var>pre</var><var>post</var></code>」
+	は
+	「<code class="hostname"><var>pre</var><var>new</var></code>」
+	に書き換えられます。
+    </dd>
+<dt><code class="option">?<var>post</var>:<var>new</var></code></dt>
+    <dd>
+	ホスト名が
+	「<code class="hostname"><var>post</var></code>」
+	で終わり、
+	それ以前の部分にドット
+	「<code>.</code>」
+	もブラケット
+	「<code>[</code>」
+	「<code>]</code>」
+	も含まない場合、例えば
+	「<code class="hostname"><var>pre</var><var>post</var></code>」
+	は
+	「<code class="hostname"><var>pre</var><var>new</var></code>」
+	に書き換えられます。
+    </dd>
+<dt><code class="option">-<var>post</var>:<var>new</var></code></dt>
+    <dd>
+	ホスト名が
+	「<code class="hostname"><var>post</var></code>」
+	で終わる場合、例えば
+	「<code class="hostname"><var>pre</var><var>post</var></code>」
+	は
+	「<code class="hostname"><var>new</var></code>」
+	に書き換えられます。
+    </dd>
+</dl>
+
+<h2><a id="searching">検索</a></h2>
+<p>
+djbdns の修飾処理は、
+修飾可能な名前を DNS から検索することができます。
+例えば、
+</p>
+<div class="sample">
+<code class="hostname">cheetah+.xyz.example.com+.example.com</code>
+</div>
+<p>
+という名前の場合、
+DNS から
+「<code class="hostname">cheetah.xyz.example.com</code>」
+というホスト名の IP アドレスを検索し、
+見つかったなら
+「<code class="hostname">cheetah.xyz.example.com</code>」
+に、
+そうれでなれば
+「<code class="hostname">cheetah.example.com</code>」
+に修飾されます。
+</p>
+<p>
+一般に、
+「<code class="hostname"><var>x</var>+<var>y1</var>+<var>y2</var>+<var>y3</var></code>」
+という名前は、
+DNS で IP アドレスが索けるなら
+「<code class="hostname"><var>x</var><var>y1</var></code>」
+に、
+そうでなければ
+DNS で IP アドレスが索けるなら
+「<code class="hostname"><var>x</var><var>y2</var></code>」
+に、
+そうでもなければ
+「<code class="hostname"><var>x</var><var>y3</var></code>」
+に修飾されます。
+「<code>+</code>」は任意の数だけ列挙することができます。
+</p>
+<p>
+検索は、書き換えの後に適用されます。
+例えば次のような書き換え規則を指定します。
+</p>
+<div class="sample">
+<pre class="config"><code class="config">?:+.xyz.example.com+.example.com</code></pre>
+</div>
+<p>
+すると、
+「<code class="hostname">lion</code>」
+というホスト名は
+「<code class="hostname">lion.xyz.example.com</code>」
+か
+「<code class="hostname">lion.example.com</code>」
+という名前に修飾され、
+「<code class="hostname">tiger</code>」
+というホスト名は
+「<code class="hostname">tiger.xyz.example.com</code>」
+か
+「<code class="hostname">tiger.example.com</code>」
+という名前に修飾され、…ということになります。
+</p>
+<p>
+検索は一般に推奨されない機能です。
+あなたが
+「<code class="hostname">gw</code>」
+は
+「<code class="hostname">gw.example.com</code>」
+に修飾されると信じて利用しているとき、
+別の誰かが不意に
+「<code class="hostname">gw.xyz.example.com</code>」
+という名前の新しいホストを追加すると、
+あなたは違うホストに接続しに行ってしまいます。
+<!-- FIXME: 言いたいことは分かるが、うまく日本語になってない -->
+検索機能は利用せずに、<!-- 文頭の部分は独自 -->
+自分で制御できる構文規則を頼りにしたほうがよいでしょう。
+</p>
+
+<h2><a id="compatibility-mechanisms">互換性のための仕組み</a></h2>
+<p>
+書き換えを指定するファイルが存在しない場合、
+djbdns の修飾処理は、
+ローカルドメイン名を 3 つの場所から探します。
+</p>
+<ol>
+    <li>
+	環境変数
+	<code class="environment">LOCALDOMAIN</code>
+	の値 (設定されている場合)
+    </li>
+    <li>
+	<code class="filename">/etc/resolv.conf</code>
+	ファイル中の最初の
+	<code>domain</code>
+	行または
+	<code>search</code>
+	行の値 (ファイルが存在し、そのような行がある場合)
+    </li>
+    <li>システムのホスト名から最初のドットまでを取り除いたもの</li>
+</ol>
+<p>
+そして、次のような書き換え指定を生成します。
+</p>
+<div class="sample">
+<pre class="config"><code class="config">?:+.<var>domain</var>
+*.:
+</code></pre>
+</div>
+<p>
+よって、ドットとブラケットを含まないホスト名には
+(DNS で名前が索けるなら)
+「<code class="domainname">.<var>domain</var></code>」
+が付加されるようになります。
+</p>
+<p>
+環境変数
+<code class="environment">LOCALDOMAIN</code>
+には検索のためのドメイン名を指定しますが、
+複数のドメイン名をスペースで区切って指定することもできます。
+同じように、
+<code class="filename">/etc/resolv.conf</code>
+の
+<code>search</code>
+行にも複数指定することができます。
+</p>
+
+<h2><a id="compatibility-notes">互換性に関する注意点</a></h2>
+<p>
+DNS のクライアントプログラムが異なれば、
+ホスト名の修飾処理も異なります。
+djbdns の修飾処理とほかの修飾処理には、
+2 つの大きな違いがあります。
+</p>
+<ul>
+    <li>
+	ほとんどのプログラムは
+	<code class="filename">/etc/resolv.conf</code>
+	しか使用しません。
+	<code class="filename">/etc/dnsrewrite</code>
+	や環境変数
+	<code class="environment">DNSREWRITEFILE</code>
+	については関知しません。
+    </li>
+    <li>
+	長時間動作するほとんどのプログラムは
+	<code class="filename">/etc/resolv.conf</code>
+	が変更されても気づきません。
+	起動時に
+	<code class="filename">/etc/resolv.conf</code>
+	を読み込んだ後は、
+	再起動されるまでは再読み込みしません。
+	対照的に、
+	djbdns の修飾処理は、
+	10 分ごとか 10000 回実行するごとに変更されているかどうか調べます。
+    </li>
+</ul>
+<p>
+また、
+2 つの小さな違いがあります。
+</p>
+<ul>
+    <li>
+	いくつかのプログラムは、
+	<code class="filename">/etc/resolv.conf</code>
+	の
+	<code>domain</code>
+	行のドメイン名を、
+	それぞれのドメインサフィックスから成る検索リストとして解釈します。
+	<!-- 独自の文 -->
+	(例えば
+	<code>domain</code>
+	行にドメイン名
+	<code class="domainname">xyz.example.com</code>
+	が指定されている場合、
+	検索候補として
+	<code class="domainname">xyz.example.com</code>、
+	<code class="domainname">example.com</code>、
+	<code class="domainname">com</code>
+	の 3 つを扱う)
+    </li>
+    <li>
+	多くのプログラムは、
+	ローカルドメイン名を使ってドット付きの名前を検索します。
+    </li>
+</ul>
+<p>
+ローカルドメイン名を利用してドット付きの名前を検索させたい場合、
+書き換え指定は次のようになります。
+</p>
+<div class="sample">
+<pre class="config"><code class="config"># aol.com -> aol.com or aol.com.xyz.example.com
+*:++.xyz.example.com
+# but skip directly to xyz.example.com if no dots
+?++.xyz.example.com:.xyz.example.com
+</code></pre>
+</div>
+
+</body>
+</html>

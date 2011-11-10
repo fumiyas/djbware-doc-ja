@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja">
+<head>
+<title>finger@(1) - ucspi-tcp</title>
+</head>
+<body>
+<h1><code class="command">finger@</code>(1) - ucspi-tcp</h1>
+<h2><a id="name">名前</a></h2>
+<p>
+<code class="command">finger@</code>
+-
+リモートホストからユーザーの情報を取得します。
+</p>
+
+<h2><a id="syntax">書式</a></h2>
+<div class="syntax">
+<code class="commandline">finger@ [<var>host</var> [<var>user</var>]]</code>
+</div>
+
+<h2><a id="description">解説</a></h2>
+<p>
+<code class="command">finger@</code>
+は、
+ホスト
+<code class="hostname"><var>host</var></code>
+の TCP ポート 79 (finger) に接続し、
+ユーザー名
+<code><var>user</var></code>
+を (末尾に CR (\015) を付加して) 送信し、
+データを受け取って表示します。
+行末の CR は削除し、
+表示できない文字は見える形式に変換します。
+</p>
+<p>
+コンピューターは TCP ポート 79 への接続に対し、
+ユーザー
+<code><var>user</var></code>
+に関する情報を応答します。
+</p>
+<p>
+<code><var>user</var></code>
+を指定しないと、
+<code class="command">finger@</code>
+は
+<code class="hostname"><var>host</var></code>
+に空白行を送信します。
+コンピューターはそのような問い合わせに対し、
+ログインしているすべてのユーザーの情報を応答します。
+</p>
+<p>
+<code class="hostname"><var>host</var></code>
+を指定しないと、
+<code class="command">finger@</code>
+はローカルホストに接続します。
+</p>
+
+</body>
+</html>

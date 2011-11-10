@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja">
+<head>
+<title>setlock(8) - daemontools</title>
+</head>
+<body>
+<h1><code class="command">setlock</code>(8) - daemontools</h1>
+<h2><a id="name">名前</a></h2>
+<p>
+<code class="command">setlock</code>
+-
+ファイルをロックしてからプログラムを起動します。
+</p>
+
+<h2><a id="syntax">書式</a></h2>
+<div class="syntax">
+<code class="commandline">setlock [-nNxX] <var>file</var> <var>program</var> [<var>arg</var> <var>...</var>]</code>
+</div>
+
+<h2><a id="description">解説</a></h2>
+<p>
+<code class="command">setlock</code>
+は、
+ファイル
+<code class="filename"><var>file</var></code>
+を書き込みオープン
+(ファイルがなければ作成)
+して排他ロックを得て、
+プログラム
+<code><var>program</var></code>
+を起動します。
+</p>
+<p>
+通常、
+ロックは
+<code><var>program</var></code>
+の終了とともに解除されます。
+</p>
+<!-- FIXME: 次の節は省略
+<p>
+Here's the complete story: child is given a descriptor for a locked ofile pointing to the disk file named fn. The lock disappears when this ofile is
+</p>
+<ul>
+<li>closed by all the processes that have descriptors for it or</li>
+<li>explicitly unlocked. </li>
+</ul>
+-->
+
+<h2><a id="option">オプション</a></h2>
+<dl>
+<dt><code class="option">-n</code></dt>
+    <dd>
+	遅延しません。
+	<code class="filename"><var>file</var></code>
+	がほかのプロセスによりロックされていたなら、
+	あきらめてすぐに終了します。
+    </dd>
+<dt><code class="option">-N</code> (デフォルト)</dt>
+    <dd>
+	遅延します。
+	<code class="filename"><var>file</var></code>
+	がほかのプロセスによりロックされていたなら、
+	ロックを得られるまで待ち続けます。
+    </dd>
+<dt><code class="option">-x</code></dt>
+    <dd>
+	<code class="filename"><var>file</var></code>
+	のオープン (もしくは作成) かロックに失敗したら、
+	0 を返して終了します。
+    </dd>
+<dt><code class="option">-X</code> (デフォルト)</dt>
+    <dd>
+	<code class="filename"><var>file</var></code>
+	のオープン (もしくは作成) かロックに失敗したら、
+	エラーメッセージを表示し、
+	0 以外の値を返して終了します。
+    </dd>
+</dl>
+
+</body>
+</html>
+

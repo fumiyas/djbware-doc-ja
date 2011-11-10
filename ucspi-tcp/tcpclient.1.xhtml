@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja">
+<head>
+<title>tcpclient(1) - ucspi-tcp</title>
+</head>
+<body>
+<h1><code class="command">tcpclient</code>(1) - ucspi-tcp</h1>
+<h2><a id="name">名前</a></h2>
+<p>
+<code class="command">tcpclient</code>
+-
+サーバーへの TCP 接続を作成します。
+</p>
+
+<h2><a id="syntax">書式</a></h2>
+<div class="syntax">
+<code class="commandline">tcpclient [<var>options</var>] <var>host</var> <var>port</var> <var>program</var> [<var>arg</var> <var>...</var>]</code>
+</div>
+
+<h2><a id="description">解説</a></h2>
+<p>
+<code class="command">tcpclient</code>
+は、
+TCP サーバーへの接続を試みます。
+接続が成功すると、
+ネットワークからの読み込み用に記述子 6 番、
+ネットワークへの書き込み用に記述子 7 番を用意し、
+<code><var>program</var></code>
+を引数
+<code><var>arg</var></code>
+とともに起動します。
+また、いくつかの環境変数を設定します
+(<a href="tcp-environ.5.xhtml">tcp-environ</a>(5) を参照)。
+</p>
+<p>
+サーバーのアドレスは、
+<code><var>host</var></code>
+と
+<code><var>port</var></code>
+で指定します。
+<code><var>port</var></code>
+には、
+サーバーの TCP ポートを
+<code class="filename">/etc/services</code>
+の名前または数値で指定することができます。
+<code><var>host</var></code>
+には、
+サーバーのホストとして、
+0 (ローカルホストを参照する)、
+ドット区切り 10 進数形式の IP アドレス、
+またはホスト名を指定することができます。
+ホスト名は、
+<code class="function">dns_ip4_qualify</code>
+関数により修飾されます
+(<a href="../djbdns/qualification.5.xhtml">qualification</a>(5) を参照)。
+</p>
+<p>
+サーバーが複数の IP アドレスを持つ場合、
+<code class="command">tcpclient</code>
+は各アドレスを順番に試します。
+</p>
+
+<h2><a id="option">オプション</a></h2>
+<h3>一般オプション</h3>
+<dl>
+<dt><code class="option">-q</code></dt>
+    <dd>
+	沈黙 (quiet)。
+	エラーメッセージを表示しません。
+    </dd>
+<dt><code class="option">-Q</code> (デフォルト)</dt>
+    <dd>
+	エラーメッセージを表示します。
+    </dd>
+<dt><code class="option">-v</code></dt>
+    <dd>
+	冗長 (verbose)。
+	エラーメッセージと状態メッセージを表示します。
+    </dd>
+</dl>
+<h3>接続オプション</h3>
+<dl>
+<dt><code class="option">-T <var>x</var>+<var>y</var></code></dt>
+    <dd>
+	接続の試行を
+	<var>x</var>+<var>y</var>
+	秒後に中断します。
+	デフォルトは 2+58 です。
+	ホストが複数の IP アドレスを持つ場合、
+	<code class="command">tcpclient</code>
+	は最初の IP アドレスへの接続を試し、
+	<var>x</var>
+	秒待ち、
+	2 番目の IP アドレスへの接続を試し、
+	<var>x</var>
+	秒待ち、…と接続に成功するまで続けます。
+	そして 2 回目の試行では、
+	IP アドレスごとに
+	<var>y</var>
+	秒待ちます。
+	+<var>y</var>
+	を省略することで、2 回目の試行を省くことができます。
+	バージョン 0.88 より前では、
+	<var>x</var>
+	だけを指定できます (デフォルト 60 秒)。
+    </dd>
+<dt><code class="option">-i <var>localip</var></code></dt>
+    <dd>
+	IP アドレス
+	<code><var>localip</var></code>
+	を接続のローカル側に用います。
+	指定されたアドレスが利用できなければ中止します。
+	通常
+	<code class="command">tcpclient</code>
+	は、
+	アドレスの選択を OS に任せます。
+    </dd>
+<dt><code class="option">-p <var>localport</var></code></dt>
+    <dd>
+	TCP ポート
+	<code><var>localport</var></code>
+	を接続のローカル側に用います。
+	指定されたポートが利用できなければ中止します。
+	通常
+	<code class="command">tcpclient</code>
+	は、
+	ポートの選択を OS に任せます。
+    </dd>
+<dt><code class="option">-d</code></dt>
+    <dd>
+	リモートホストの応答が遅い場合にデータの送信を数分の 1 秒遅らせます。
+	現在のところデフォルトですが、
+	将来どうなるかは不定です。
+	必要であれば明示的に指定してください。
+    </dd>
+<dt><code class="option">-D</code></dt>
+    <dd>
+	データの送信を遅らせません
+	(TCP ソケットオプション <code>TCP_NODELAY</code> を有効にします)。
+    </dd>
+</dl>
+<h3>データ取得オプション</h3>
+<dl>
+<dt><code class="option">-h</code> (デフォルト)</dt>
+    <dd>
+	リモートホストの名前を DNS から検索し、
+	環境変数
+	<code class="environment">TCPREMOTEHOST</code>
+	に設定します。
+    </dd>
+<dt><code class="option">-H</code></dt>
+    <dd>
+	リモートホストの名前を DNS から検索しません。
+	環境変数
+	<code class="environment">TCPREMOTEHOST</code>
+	は削除します。
+    </dd>
+<dt><code class="option">-l <var>localname</var></code></dt>
+    <dd>
+	ローカルホストの名前を DNS から検索せずに、
+	代わりに
+	<code class="hostname"><var>localname</var></code>
+	を
+	環境変数
+	<code class="environment">TCPLOCALHOST</code>
+	に設定します。
+	一般的には、
+	<code class="hostname"><var>localname</var></code>
+	として
+	「<code class="hostname">0</code>」
+	を指定します。
+    </dd>
+<dt><code class="option">-r</code> (デフォルト)</dt>
+    <dd>
+	接続の情報をリモートホスト
+	<!-- 独自の括弧 -->
+	(auth/ident サービス)
+	から取得し、
+	環境変数
+	<code class="environment">TCPREMOTEINFO</code>
+	に設定します。
+    </dd>
+<dt><code class="option">-R</code></dt>
+    <dd>
+	接続の情報をリモートホストから取得しません。
+	環境変数
+	<code class="environment">TCPREMOTEINFO</code>
+	は削除します。
+    </dd>
+<dt><code class="option">-t <var>n</var></code></dt>
+    <dd>
+	環境変数
+	<code class="environment">TCPREMOTEINFO</code>
+	用の値を得るための接続試行を
+	<var>n</var>
+	秒で中断します。
+	デフォルトは 26 秒です。
+    </dd>
+</dl>
+
+</body>
+</html>

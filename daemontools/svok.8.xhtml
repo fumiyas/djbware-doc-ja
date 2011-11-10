@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja">
+<head>
+<title>svok(8) - daemontools</title>
+</head>
+<body>
+<h1><code class="command">svok</code>(8) - daemontools</h1>
+<h2><a id="name">名前</a></h2>
+<p>
+<code class="command">svok</code>
+-
+<a href="supervise.8.xhtml"><code class="command">supervise(8)</code></a>
+が動作しているかどうかを調べます。
+</p>
+
+<h2><a id="syntax">書式</a></h2>
+<div class="syntax">
+<code class="commandline">svok <var>service</var></code>
+</div>
+
+<h2><a id="description">解説</a></h2>
+<p>
+<code class="command">svok</code>
+は、
+<a href="supervise.8.xhtml"><code class="command">supervise(8)</code></a>
+プロセスがディレクトリ
+<code class="directoryname"><var>service</var></code>
+以下で正常に動作しているかどうか調べます。
+<!-- 以下は独自の文 -->
+メッセージは何も表示せず、終了コードで結果を示します。
+</p>
+
+<h2><a id="exitcode">終了コード</a></h2>
+<p>
+<a href="supervise.8.xhtml"><code class="command">supervise(8)</code></a>
+が正常に動作しているなら 0 を返します。
+そうでなければ、100 を返します。
+</p>
+
+</body>
+</html>

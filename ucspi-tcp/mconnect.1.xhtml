@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja">
+<head>
+<title>mconnect(1) - ucspi-tcp</title>
+</head>
+<body>
+<h1><code class="command">mconnect</code>(1) - ucspi-tcp</h1>
+<h2><a id="name">名前</a></h2>
+<p>
+<code class="command">mconnect</code>
+-
+リモート SMTP サーバーへ接続します。
+</p>
+
+<h2><a id="syntax">書式</a></h2>
+<div class="syntax">
+<code class="commandline">mconnect [<var>host</var> [<var>port</var>]]</code>
+</div>
+
+<h2><a id="description">解説</a></h2>
+<p>
+<code class="command">mconnect</code>
+は、
+ホスト
+<code class="hostname"><var>host</var></code>
+の TCP ポート
+<code><var>port</var></code>
+に接続します。
+そして標準入力から読み込んだ行に CR (\015) を付加して
+<code class="hostname"><var>host</var></code>
+に送信し、
+一方では
+<code class="hostname"><var>host</var></code>
+から受信したデータを表示します。
+</p>
+<p>
+<code><var>port</var></code>
+を指定しないと、
+<code class="command">mconnect</code>
+は TCP ポート 25 (SMTP) を使用します。
+</p>
+<p>
+<code class="hostname"><var>host</var></code>
+を指定しないと、
+<code class="command">mconnect</code>
+はローカルホストに接続します。
+</p>
+
+</body>
+</html>
